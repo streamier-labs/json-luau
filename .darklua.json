@@ -13,7 +13,6 @@
     "remove_function_call_parens",
     "remove_interpolated_string",
     "remove_nil_declaration",
-    "remove_spaces",
     "remove_unused_if_branch",
     "remove_unused_variable",
     "remove_unused_while",
