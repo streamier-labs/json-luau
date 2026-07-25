@@ -1,0 +1,26 @@
+# Code coverage
+coverage.out
+
+# Profiling
+profile.out
+profile.svg
+
+# Time trace
+trace.json
+
+# Luau packages
+luau_packages/
+
+# Distribution
+dist/
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml

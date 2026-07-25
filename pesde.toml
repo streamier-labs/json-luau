@@ -1,0 +1,17 @@
+name = "streamier-labs/json"
+version = "0.1.0"
+description = "A lightweight JSON encoder/decoder for Luau"
+authors = [
+  "Amir Farzamnia <amirfarzamnia@proton.me> (https://github.com/amirfarzamnia)",
+]
+repository = "https://github.com/streamier-labs/json-luau"
+license = "MIT"
+includes = ["pesde.toml", "README.md", "LICENSE"]
+
+[target]
+environment = "luau"
+lib = "dist/main.luau"
+
+[scripts]
+build = "scripts/build.luau"
+test = "scripts/test.luau"

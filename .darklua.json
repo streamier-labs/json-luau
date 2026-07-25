@@ -1,0 +1,31 @@
+{
+  "bundle": {
+    "require_mode": "path"
+  },
+  "rules": [
+    "compute_expression",
+    "convert_index_to_field",
+    "convert_luau_number",
+    "convert_square_root_call",
+    "filter_after_early_return",
+    "group_local_assignment",
+    "remove_empty_do",
+    "remove_function_call_parens",
+    "remove_interpolated_string",
+    "remove_nil_declaration",
+    "remove_spaces",
+    "remove_unused_if_branch",
+    "remove_unused_variable",
+    "remove_unused_while",
+    {
+      "rule": "append_text_comment",
+      "text": "!nocheck",
+      "location": "start"
+    },
+    {
+      "rule": "append_text_comment",
+      "text": "!nolint",
+      "location": "start"
+    }
+  ]
+}
