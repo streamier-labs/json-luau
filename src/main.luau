@@ -241,8 +241,8 @@ local function parseString(state: ParserState): string
 
 	while state.cursor <= length do
 		local finish, _, char = string.find(source, '(["\\])', state.cursor)
-		if not finish then
-			parseError(state, "Unterminated string literal")
+		if not finish or not char then
+			return parseError(state, "Unterminated string literal")
 		end
 
 		if finish > state.cursor then
@@ -269,7 +269,7 @@ local function parseString(state: ParserState): string
 
 		--- Handle escape sequence parsing
 		if state.cursor > length then
-			parseError(state, "Unexpected end of input in escape sequence")
+			return parseError(state, "Unexpected end of input in escape sequence")
 		end
 
 		local escapeChar = string.sub(source, state.cursor, state.cursor)
@@ -290,20 +290,20 @@ local function parseString(state: ParserState): string
 		elseif escapeChar == "u" then
 			local hex = string.sub(source, state.cursor, state.cursor + 3)
 			if #hex < 4 then
-				parseError(state, "Invalid unicode escape sequence '\\u" .. hex .. "'")
+				return parseError(state, "Invalid unicode escape sequence '\\u" .. hex .. "'")
 			end
 			state.cursor += 4
 			local codepoint = tonumber(hex, 16)
 			if not codepoint then
-				parseError(state, "Invalid hex digits in unicode escape '\\u" .. hex .. "'")
+				return parseError(state, "Invalid hex digits in unicode escape '\\u" .. hex .. "'")
 			end
 			table.insert(chunks :: { string }, utf8.char(codepoint))
 		else
-			parseError(state, "Invalid escape sequence '\\" .. escapeChar .. "'")
+			return parseError(state, "Invalid escape sequence '\\" .. escapeChar .. "'")
 		end
 	end
 
-	parseError(state, "Unterminated string literal")
+	return parseError(state, "Unterminated string literal")
 end
 
 --- Parses a JSON numeric token, supporting integer, decimal, negative, and exponent notation (`e`/`E`).
@@ -314,20 +314,22 @@ end
 local function parseNumber(state: ParserState): number
 	local source = state.source
 	local matchStart, matchEnd = string.find(source, "^%-?%d+%.?%d*[eE][%+%-]?%d+", state.cursor)
-	if not matchStart then
+	if not matchStart or not matchEnd then
 		matchStart, matchEnd = string.find(source, "^%-?%d+%.?%d*", state.cursor)
 	end
 
-	if matchStart then
-		local numStr = string.sub(source, matchStart, matchEnd)
-		local num = tonumber(numStr)
-		if num then
-			state.cursor = matchEnd + 1
-			return num
-		end
+	if not matchStart or not matchEnd then
+		return parseError(state, "Malformed number")
 	end
 
-	parseError(state, "Malformed number")
+	local numStr = string.sub(source, matchStart, matchEnd)
+	local num = tonumber(numStr)
+	if not num then
+		return parseError(state, "Malformed number")
+	end
+
+	state.cursor = matchEnd + 1
+	return num
 end
 
 --- Parses a JSON array token `[...]` into a 1-indexed sequential Luau array table.
@@ -357,7 +359,7 @@ local function parseArray(state: ParserState): { JSONValue }
 		elseif char == "," then
 			state.cursor += 1
 		else
-			parseError(state, "Expected ',' or ']' in array, got '" .. char .. "'")
+			return parseError(state, "Expected ',' or ']' in array, got '" .. char .. "'")
 		end
 	end
 
@@ -384,14 +386,14 @@ local function parseObject(state: ParserState): { [string]: JSONValue }
 	while true do
 		skipWhitespace(state)
 		if peek(state) ~= '"' then
-			parseError(state, "Expected string key in object, got '" .. peek(state) .. "'")
+			return parseError(state, "Expected string key in object, got '" .. peek(state) .. "'")
 		end
 
 		local key = parseString(state)
 		skipWhitespace(state)
 
 		if peek(state) ~= ":" then
-			parseError(state, "Expected ':' after key, got '" .. peek(state) .. "'")
+			return parseError(state, "Expected ':' after key, got '" .. peek(state) .. "'")
 		end
 		state.cursor += 1 --- Consume `:`
 
@@ -406,7 +408,7 @@ local function parseObject(state: ParserState): { [string]: JSONValue }
 		elseif char == "," then
 			state.cursor += 1
 		else
-			parseError(state, "Expected ',' or '}' in object, got '" .. char .. "'")
+			return parseError(state, "Expected ',' or '}' in object, got '" .. char .. "'")
 		end
 	end
 
@@ -440,7 +442,7 @@ parseValue = function(state: ParserState): JSONValue
 		state.cursor += 4
 		return nil
 	else
-		parseError(state, "Unexpected character '" .. char .. "'")
+		return parseError(state, "Unexpected character '" .. char .. "'")
 	end
 end
 
@@ -465,7 +467,7 @@ function JSON.decode(jsonString: string): JSONValue
 	skipWhitespace(state)
 
 	if state.cursor <= state.length then
-		parseError(state, "Unexpected trailing character data after valid JSON")
+		return parseError(state, "Unexpected trailing character data after valid JSON")
 	end
 
 	return result
