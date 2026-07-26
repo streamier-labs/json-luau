@@ -17,7 +17,7 @@ ______________________________________________________________________
 - **Explicit `null` Handling:** Includes a sentinel `JSON.Null` value to preserve
   explicit `null` fields in Luau tables.
 - **Zero Dependencies:** Pure Luau implementation designed to work seamlessly in
-  Luau environments[cite: 1, 3].
+  Luau environments.
 
 ______________________________________________________________________
 
@@ -128,7 +128,7 @@ If you are contributing or running this repository locally:
 
 ### Environment Setup
 
-This repository uses [`devenv`](https://devenv.sh/) for
+This repository uses [`devenv`](https://devenv.sh) for
 reproducible development environments with Nix.
 
 ```bash
