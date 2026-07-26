@@ -1,4 +1,4 @@
-name = "streamier-labs/json"
+name = "streamier/json"
 version = "0.1.0"
 description = "A lightweight JSON encoder/decoder for Luau"
 authors = [
