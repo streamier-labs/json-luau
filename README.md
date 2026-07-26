@@ -1,4 +1,4 @@
-# JSON (Luau)
+# JSON.luau
 
 A lightweight, pure Luau JSON encoder and decoder module adhering strictly to the
 [RFC 8259 specification](https://www.rfc-editor.org/rfc/rfc8259).
