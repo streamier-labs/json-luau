@@ -1,4 +1,4 @@
-# json
+# JSON (Luau)
 
 A lightweight, pure Luau JSON encoder and decoder module adhering strictly to the
 [RFC 8259 specification](https://www.rfc-editor.org/rfc/rfc8259).
@@ -137,8 +137,8 @@ devenv shell
 
 ### Commands
 
-- **Build:** `pesde run scripts/build`
-- **Test:** `pesde run scripts/test`
+- **Build:** `pesde run build`
+- **Test:** `pesde run test`
 - **Format Code:** `treefmt`
 
 ______________________________________________________________________
