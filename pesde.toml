@@ -1,6 +1,6 @@
 name = "streamier/json"
 version = "0.1.0"
-description = "A lightweight JSON encoder/decoder for Luau"
+description = "A lightweight, pure Luau JSON encoder and decoder module adhering strictly to the RFC 8259 specification."
 authors = [
   "Amir Farzamnia <amirfarzamnia@proton.me> (https://github.com/amirfarzamnia)",
 ]
