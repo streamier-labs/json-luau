@@ -11,7 +11,13 @@
     darklua
     luau
     lune
+
+    # FIXME: Pesde
+    pkgs.dbus
   ];
+
+  # FIXME: Pesde
+  env.LD_LIBRARY_PATH = "${pkgs.dbus.lib}/lib";
 
   # ============================================================================
   # Code Formatting (treefmt)
